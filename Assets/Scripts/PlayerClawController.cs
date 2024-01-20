@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerClawController : MonoBehaviour
 {
@@ -17,20 +19,28 @@ public class PlayerClawController : MonoBehaviour
     private bool isGoingUp = false;
     private float initialYPosition;
     private float maxYPosition;
+    public float maxZRotation;
+
     private float[] prizesInitialPosition = new float[3];
 
     public Transform leftClaw;
     public Transform rightClaw;
 
+
     public float rotationSpeed = 50f;
 
-    public bool prizeInClaw;
+    public bool prizeInClaw = false;
+    public bool clawOpened = true;
+    public bool dropPrize = false;
+
+    //private float maxZRotationCounter = 50f;
 
     // Start is called before the first frame update
     void Start()
     {
         initialYPosition = clawRigidBody.position.y;
         maxYPosition = initialYPosition - 2f;
+        //initalClawsZRotation = rightClaw.rotation.z; //could be any cause both has the same put in different directions but im using right cause is a positive number
 
         for (int i = 0; i < prizesRigidBody.Length; i++)
         {
@@ -42,13 +52,21 @@ public class PlayerClawController : MonoBehaviour
     void Update()
     {
         // Prize na claw
-        for (int i = 0; i < prizesRigidBody.Length; i++) {
-            if (Mathf.Approximately(prizesRigidBody[i].position.y, prizesInitialPosition[i] + 1))
+        if (!clawOpened)
+        {
+            for (int i = 0; i < prizesRigidBody.Length; i++)
             {
-                prizeInClaw = true;
+                if (prizesRigidBody[i].position.y > prizesInitialPosition[i] + 1)
+                {
+                    Debug.Log("Prize!");
+                    prizeInClaw = true;
+                    break;
+                }
             }
+        } else // se claw estiver aberta, nunca procurar por prize
+        {
+            prizeInClaw = false;
         }
-
 
         // Mudar o estado da garra apenas se ela não estiver atualmente se movendo para baixo ou para cima
         if (!isGoingDown && !isGoingUp)
@@ -57,10 +75,9 @@ public class PlayerClawController : MonoBehaviour
             clawRigidBody.velocity = new Vector2(moveSpeed * Input.GetAxisRaw("Horizontal"), clawRigidBody.velocity.y);
         }
 
-        if (!prizeInClaw)
+        if (Input.GetButtonDown("Submit"))
         {
-
-            if (Input.GetButtonDown("Submit"))
+            if (!prizeInClaw)
             {
                 // Mudar o estado da garra apenas se ela não estiver atualmente se movendo para baixo
                 if (!isGoingDown && !isGoingUp)
@@ -73,32 +90,48 @@ public class PlayerClawController : MonoBehaviour
                     isGoingUp = true;
                 }
             }
-        } else
-        {
-            Debug.Log("Prize na Garra");
+            else if (prizeInClaw && !isGoingDown && !isGoingUp)
+            {
+                dropPrize = true;
+            }
         }
-
-        //if (Input.GetButtonDown("Submit"))
-        //{
-        //    // Mudar o estado da garra apenas se ela não estiver atualmente se movendo para baixo
-        //    if (!isGoingDown && !isGoingUp)
-        //    {
-        //        isGoingDown = true;
-        //    } else if (isGoingDown)
-        //    {
-        //        isGoingDown = false;
-        //        isGoingUp = true;
-        //    } 
-        //}
 
         if (isGoingDown)
         {
+            clawOpened = false;
             GoDown();
         }
 
         if (isGoingUp)
         {
             GoUp();
+        }
+
+        // if not going down or going up and no prizes in the claw, open the claw
+        if (!isGoingDown && !isGoingUp && !clawOpened)
+        {
+            if (!prizeInClaw)
+            {
+                OpenClaws();
+            } else if (prizeInClaw && dropPrize)
+            {
+                OpenClaws();
+            }
+        }
+    }
+    void OpenClaws()
+    {
+        if (rightClaw.rotation.z >= 0.50) // se claw está aberta, não tem prize e nem comando drop
+        {
+
+            dropPrize = false;
+            clawOpened = true;
+        }
+        else
+        {
+            var rotation = maxZRotation - rightClaw.rotation.z;
+            RotateClaw(leftClaw, -rotation);
+            RotateClaw(rightClaw, rotation);
         }
     }
 
@@ -143,28 +176,4 @@ public class PlayerClawController : MonoBehaviour
         // Rotate the claw around its local axis (you may need to adjust the axis)
         claw.Rotate(Vector3.forward, rotationAmount);
     }
-
-    //// auto called by Unity
-    //void FixedUpdate()
-    //{
-    //    // Mover para baixo e voltar ao ponto de partida
-    //    if (isGoingDown)
-    //    {
-    //        // Move para baixo até a posição maxYPosition
-    //        float newYPosition = Mathf.MoveTowards(clawRigidBody.position.y, maxYPosition, downSpeed * Time.fixedDeltaTime);
-    //        clawRigidBody.MovePosition(new Vector2(clawRigidBody.position.x, newYPosition));
-
-    //        // Se atingiu a posição maxYPosition, muda o estado para voltar
-    //        if (Mathf.Approximately(newYPosition, maxYPosition))
-    //        {
-    //            isGoingDown = false;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        // Move de volta ao ponto de partida
-    //        float newYPosition = Mathf.MoveTowards(clawRigidBody.position.y, initialYPosition, downSpeed * Time.fixedDeltaTime);
-    //        clawRigidBody.MovePosition(new Vector2(clawRigidBody.position.x, newYPosition));
-    //    }
-    //}
 }

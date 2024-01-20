@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Edges
+  - Prize
   layers:
   - Default
   - TransparentFX
