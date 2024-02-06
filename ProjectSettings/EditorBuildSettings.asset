@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MachineScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/PrizeMenu.unity
+    guid: 4fe826b597e488f449c3cada43d330c8
+  - enabled: 1
+    path: Assets/Scenes/TicketMenu.unity
+    guid: 5dcc94da2429c174baec8e136a887a81
   m_configObjects: {}

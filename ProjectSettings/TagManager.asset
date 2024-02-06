@@ -43,9 +43,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Prize
+    uniqueID: 2352554069
+    locked: 0
   - name: MachineStruct
     uniqueID: 1308882547
     locked: 0
   - name: MachineComponents
     uniqueID: 871157013
+    locked: 0
+  - name: PrizeBack
+    uniqueID: 810815795
+    locked: 0
+  - name: Cursor
+    uniqueID: 506050801
     locked: 0
