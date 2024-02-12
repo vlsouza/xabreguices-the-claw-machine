@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9073924794615924198}
   - component: {fileID: 1898106174125044002}
   - component: {fileID: 3152046177253191656}
+  - component: {fileID: 5220862023173223774}
   m_Layer: 0
   m_Name: bear
   m_TagString: Prize
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: -1942413227
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9c1a339ed91b71f409a362fad44001ea, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dd4abc214a3724344b1cea4796b1d677, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -145,6 +146,19 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.019885954, y: 0.019886527}
-  m_Size: {x: 1.9207091, y: 4.647066}
+  m_Offset: {x: 0.032879196, y: -0.13841064}
+  m_Size: {x: 1.8151789, y: 4.710386}
   m_Direction: 0
+--- !u!114 &5220862023173223774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26985398656088077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b9b26478ad0c044682351767a035cd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prizeRigidBody2D: {fileID: 1898106174125044002}

@@ -43,6 +43,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: ClawComponent
+    uniqueID: 870250607
+    locked: 0
   - name: Prize
     uniqueID: 2352554069
     locked: 0
