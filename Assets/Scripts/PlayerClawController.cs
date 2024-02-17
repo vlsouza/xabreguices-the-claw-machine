@@ -34,12 +34,23 @@ public class PlayerClawController : MonoBehaviour
 
     public States state = States.DEFAULT;
 
+    public bool isSubmitted;
+
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
+        AudioManager.instance.PlayGameplayTheme(1);
         initialYPosition = playerClawRigidBody.position.y;
         maxYPosition = initialYPosition - 2.5f;
+    }
+
+    void Update()
+    {
+        if (Input.GetButtonDown("Submit"))
+        {
+            isSubmitted = true;
+        }
     }
 
     // Update is called once per frame
@@ -51,28 +62,33 @@ public class PlayerClawController : MonoBehaviour
                 prizeInClaw = false;
                 MoveClaw();
                 OpenClaws();
-                if (Input.GetButtonDown("Submit"))
+                if (isSubmitted)
                 {
                     state = States.GOING_DOWN;
                 }
+                isSubmitted = false;
                 break;
             case States.DEFAULT_WITH_PRIZE:
                 MoveClaw();
                 CloseClaws();
-                if (Input.GetButtonDown("Submit"))
+                if (isSubmitted)
                 {
+                    AudioManager.instance.PlaySFX(0);
                     state = States.DEFAULT;
                 }
+                isSubmitted = false;
                 break;
             case States.GOING_DOWN:
+                AudioManager.instance.PlaySFX(2);
                 GoDown();
                 CloseClaws();
-                if (Input.GetButtonDown("Submit"))
-                {
-                    state = States.GOING_UP;
-                }
+
+                isSubmitted = false;
                 break;
             case States.GOING_UP:
+                AudioManager.instance.PlaySFX(2);
+                isSubmitted = false;
+
                 if (!prizeInClaw)
                 {
                     GoUp(States.DEFAULT);
@@ -135,10 +151,11 @@ public class PlayerClawController : MonoBehaviour
         {
             state = States.GOING_DOWN;
         } 
-        else 
+        else if (state == States.DEFAULT_WITH_PRIZE)
         {
+            AudioManager.instance.PlaySFX(0);
             state = States.DEFAULT;
-        }
+        } 
     }
 
     void GoUp(States nextState)

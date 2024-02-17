@@ -9,16 +9,16 @@ public class CursorController : MonoBehaviour
     {
         // Hide the cursor
         Cursor.visible = false;
+
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0f;
+        mousePosition.y = 4f;
+        transform.position = mousePosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //// Posiciona o cursor na posição do mouse
-        //Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //mousePosition.z = 0f; // Garante que o cursor está na mesma profundidade
-        //transform.position = mousePosition;
-
         // Verifica se há toques na tela
         if (Input.touchCount > 0)
         {
